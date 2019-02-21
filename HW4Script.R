@@ -1,0 +1,42 @@
+getwd()
+setwd("~/Desktop/204B")
+mydata<-read.csv("darktriad.csv")
+head(mydata)
+m1<-lm(y~n1+n2,data=mydata)
+summary(m1)
+m2<-lm(y~n1+n2+m1+m2,data=mydata)
+summary(m2)
+m3<-lm(y~n1+n2+m1+m2+p1+p2,data=mydata)
+summary(m3)
+anova(m2,m1)
+anova(m3,m2)
+
+
+full.model=lm(y~n1+n2+m1+m2+p1+p2, data=mydata)
+backwards.model=step(full.model,direction=c("backward"))
+#includes n1+n2+m1+m2+p1
+
+intercept.model=lm(y~1,data=mydata)
+forwards.model=step(intercept.model,direction=c("forward"),scope=~n1+n2+m1+m2+p1+p2)
+
+m4<-lm(y~n1+n2+m1+m2+p1, data=mydata)
+anova(m4,m3)
+
+mydata2<-read.csv("poly.csv")
+head(mydata2)
+
+m1y1 <- lm(y1 ~ x1, data=mydata2)	
+m2y1 <- lm(y1 ~ x1 + I(x1*x1), data=mydata2)
+m3y1 <- lm(y1 ~ x1 + I(x1*x1) + I(x1*x1*x1), data=mydata2)	
+anova(m3y1,m2y1)
+anova(m2y1,m1y1)
+m1y2 <- lm(y2 ~ x1, data=mydata2)
+m2y2 <- lm(y2 ~ x1 + I(x1*x1), data=mydata2)
+m3y2 <- lm(y2 ~ x1 + I(x1*x1) + I(x1*x1*x1), data=mydata2)
+anova(m3y2,m2y2)
+anova(m2y2,m1y2)
+m1y3 <- lm(y3 ~ x1, data=mydata2)
+m2y3 <- lm(y3 ~ x1 + I(x1*x1), data=mydata2)	
+m3y3 <- lm(y3 ~ x1 + I(x1*x1) + I(x1*x1*x1), data=mydata2)	
+anova(m3y3,m2y3)
+anova(m2y3,m1y3)
